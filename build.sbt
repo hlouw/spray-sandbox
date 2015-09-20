@@ -39,7 +39,7 @@ releaseProcess := Seq[ReleaseStep](
   setReleaseVersion,                      // : ReleaseStep
   commitReleaseVersion,                   // : ReleaseStep, performs the initial git checks
   tagRelease,                             // : ReleaseStep
-//  publishArtifacts,                       // : ReleaseStep, checks whether `publishTo` is properly set up
+  releaseStepTask(publishLocal in Docker),
   setNextVersion,                         // : ReleaseStep
   commitNextVersion,                      // : ReleaseStep
   pushChanges                             // : ReleaseStep, also checks that an upstream branch is properly configured

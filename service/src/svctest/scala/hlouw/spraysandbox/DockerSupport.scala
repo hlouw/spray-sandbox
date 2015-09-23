@@ -1,6 +1,6 @@
 package hlouw.spraysandbox
 
-import com.spotify.docker.client.messages.{ContainerConfig, ContainerCreation, ContainerInfo, HostConfig}
+import com.spotify.docker.client.messages.{ContainerConfig, HostConfig}
 import com.spotify.docker.client.{DefaultDockerClient, DockerClient}
 
 trait DockerSupport {
@@ -8,28 +8,30 @@ trait DockerSupport {
   private val docker: DockerClient = DefaultDockerClient.fromEnv().build()
 
   def runContainer(): String = {
+
     val containerId = {
-      val containerConfig: ContainerConfig = ContainerConfig.builder().image("hlouw/spray-sandbox").build()
-      val creation: ContainerCreation = docker.createContainer(containerConfig)
+      val containerConfig = ContainerConfig.builder().image("hlouw/spray-sandbox").build()
+      val creation = docker.createContainer(containerConfig)
       creation.id()
     }
 
     val hostConfig: HostConfig = HostConfig.builder().publishAllPorts(true).build()
 
     docker.startContainer(containerId, hostConfig)
-    println("Started on port: " + hostPort(containerId, 8080))
 
     containerId
   }
 
-  def shutdownContainer(containerId: String) = {
+  def shutdownContainer(containerId: String): Unit = {
     docker.stopContainer(containerId, 2)
     docker.removeContainer(containerId)
   }
 
-  def hostPort(containerId: String, internalPort: Int) = {
-    val info: ContainerInfo = docker.inspectContainer(containerId)
+  def hostPort(containerId: String, internalPort: Int): String = {
+    val info = docker.inspectContainer(containerId)
     info.networkSettings().ports().get(s"$internalPort/tcp").get(0).hostPort()
   }
+
+  def hostIP(containerId: String): String = "192.168.99.100"
 
 }

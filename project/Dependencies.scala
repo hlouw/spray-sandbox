@@ -23,10 +23,17 @@ object Dependencies {
   val dockerClient = "com.spotify" % "docker-client" % "2.7.7" classifier "shaded"
 
   // Projects
-  val serviceDeps = Seq(
-    sprayCan, sprayRouting, sprayHttpx, akkaActor, json4sJackson,
+  val coreDeps = Seq(
+    sprayCan, sprayRouting, sprayHttpx, akkaActor, json4sJackson
+  )
+
+  val serviceDeps = coreDeps ++ Seq(
     sprayClient % Test, akkaTestkit % Test, sprayTestkit % Test, specs2core % Test, dockerClient % Test,
     sprayClient % ServiceTest, specs2core % ServiceTest, dockerClient % ServiceTest
+  )
+
+  val clientDeps = coreDeps ++ Seq(
+    sprayClient
   )
 
 }

@@ -17,9 +17,10 @@ lazy val entities = project
 lazy val client = project
   .dependsOn(entities)
   .settings(commonSettings: _*)
+  .settings(libraryDependencies ++= clientDeps)
 
 lazy val service = project
-  .dependsOn(entities)
+  .dependsOn(entities, client)
   .configs(ServiceTest)
   .settings(commonSettings: _*)
   .settings(ServiceTestSettings: _*)

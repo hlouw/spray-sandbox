@@ -16,6 +16,7 @@ lazy val entities = project
 
 lazy val client = project
   .dependsOn(entities)
+  .settings(name := "spray-sandbox-client")
   .settings(commonSettings: _*)
   .settings(libraryDependencies ++= clientDeps)
 
